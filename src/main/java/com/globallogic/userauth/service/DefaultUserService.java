@@ -2,8 +2,9 @@ package com.globallogic.userauth.service;
 
 import com.globallogic.userauth.model.Phone;
 import com.globallogic.userauth.model.User;
-import com.globallogic.userauth.model.request.UserRegistrationRequest;
-import com.globallogic.userauth.model.response.UserRegistrationResponse;
+import com.globallogic.userauth.dto.PhoneDto;
+import com.globallogic.userauth.dto.UserRegistrationRequestDto;
+import com.globallogic.userauth.dto.UserRegistrationResponseDto;
 import com.globallogic.userauth.repository.UserRepository;
 import com.globallogic.userauth.security.JwtTokenManager;
 import com.globallogic.userauth.validation.UserAlreadyExistException;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Default implementation of {@link UserService}
@@ -40,32 +42,42 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public UserRegistrationResponse registerNewUser(UserRegistrationRequest userRegistrationRequest) {
-        if (userRepository.existsByEmail(userRegistrationRequest.getEmail())) {
-            throw new UserAlreadyExistException(format("The email '%s' is already used", userRegistrationRequest.getEmail()));
+    public UserRegistrationResponseDto registerNewUser(UserRegistrationRequestDto userRegistrationRequestDto) {
+        if (userRepository.existsByEmail(userRegistrationRequestDto.getEmail())) {
+            throw new UserAlreadyExistException(format("The email '%s' is already used", userRegistrationRequestDto.getEmail()));
         }
 
-        String encodedPassword = passwordEncoder.encode(userRegistrationRequest.getPassword());
+        String name = userRegistrationRequestDto.getName();
+        String email = userRegistrationRequestDto.getEmail();
+        List<Phone> phones = userRegistrationRequestDto.getPhones().stream().map(p -> {
+            Phone phone = new Phone();
+            phone.setNumber(p.getNumber());
+            phone.setCitycode(p.getCityCode());
+            phone.setCountrycode(p.getCountryCode());
+            return phone;
+        }).collect(toList());
+        String encodedPassword = passwordEncoder.encode(userRegistrationRequestDto.getPassword());
+        boolean isActive = true;
 
         User user = new User();
-        user.setName(userRegistrationRequest.getName());
-        user.setEmail(userRegistrationRequest.getEmail());
-        user.setPhones(userRegistrationRequest.getPhones());
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhones(phones);
+        user.setActive(isActive);
         user.setPassword(encodedPassword);
-        user.setActive(true);
+        for (Phone phone : phones) {
+            phone.setUser(user);
+        }
 
         user = userRepository.saveAndFlush(user);
 
         UUID id = user.getId();
-        String name = user.getName();
-        String email = user.getEmail();
-        List<Phone> phones = user.getPhones();
+        List<PhoneDto> phoneDtos = userRegistrationRequestDto.getPhones();
         LocalDateTime created = user.getCreated();
-        boolean isActive = user.isActive();
-
+        LocalDateTime lastLogin = user.getLastLogin();
         String token = jwtTokenManager.generateJwtToken(user.getEmail());
 
-        return new UserRegistrationResponse(id, name, email, phones, created, user.getLastLogin(), token, isActive);
+        return new UserRegistrationResponseDto(id, name, email, phoneDtos, created, lastLogin, token, isActive);
     }
 
 }

@@ -1,15 +1,15 @@
-package com.globallogic.userauth.model.request;
-
-import com.globallogic.userauth.model.Phone;
+package com.globallogic.userauth.dto;
 
 import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 /**
  * POJO that represents a user registration request
  *
  * @since 1.0.0
  */
-public class UserRegistrationRequest {
+public class UserRegistrationRequestDto {
 
     private final String name;
 
@@ -17,13 +17,13 @@ public class UserRegistrationRequest {
 
     private final String password;
 
-    private final List<Phone> phones;
+    private final List<PhoneDto> phones;
 
-    public UserRegistrationRequest(String name, String email, String password, List<Phone> phones) {
+    public UserRegistrationRequestDto(String name, String email, String password, List<PhoneDto> phones) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.phones = phones;
+        this.phones = phones != null ? phones : emptyList();
     }
 
     public String getName() {
@@ -38,7 +38,7 @@ public class UserRegistrationRequest {
         return password;
     }
 
-    public List<Phone> getPhones() {
+    public List<PhoneDto> getPhones() {
         return phones;
     }
 }

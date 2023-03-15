@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'groovy'
     id 'org.springframework.boot' version '2.7.9'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
@@ -21,6 +20,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation "org.spockframework:spock-core:2.1-groovy-3.0"

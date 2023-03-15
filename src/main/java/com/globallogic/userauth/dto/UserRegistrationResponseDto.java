@@ -1,6 +1,6 @@
-package com.globallogic.userauth.model.response;
+package com.globallogic.userauth.dto;
 
-import com.globallogic.userauth.model.Phone;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.UUID;
  *
  * @since 1.0.0
  */
-public class UserRegistrationResponse {
+public class UserRegistrationResponseDto {
 
     private final UUID id;
 
@@ -19,7 +19,7 @@ public class UserRegistrationResponse {
 
     private final String email;
 
-    private final List<Phone> phones;
+    private final List<PhoneDto> phones;
 
     private final LocalDateTime created;
 
@@ -27,9 +27,10 @@ public class UserRegistrationResponse {
 
     private final String token;
 
+    @JsonProperty(value="isActive")
     private final boolean isActive;
 
-    public UserRegistrationResponse(UUID id, String name, String email, List<Phone> phones, LocalDateTime created, LocalDateTime lastLogin, String token, boolean isActive) {
+    public UserRegistrationResponseDto(UUID id, String name, String email, List<PhoneDto> phones, LocalDateTime created, LocalDateTime lastLogin, String token, boolean isActive) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -52,7 +53,7 @@ public class UserRegistrationResponse {
         return email;
     }
 
-    public List<Phone> getPhones() {
+    public List<PhoneDto> getPhones() {
         return phones;
     }
 

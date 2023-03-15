@@ -1,10 +1,14 @@
 package com.globallogic.userauth.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-
 import java.util.UUID;
+
+import static javax.persistence.FetchType.LAZY;
 
 /**
  * Entity that represents a phone number
@@ -15,35 +19,28 @@ import java.util.UUID;
 public class Phone {
 
     @Id
-    private long id;
-
-    @NotNull(message = "user id should not be null")
-    private UUID userId;
+    @GeneratedValue
+    private UUID id;
 
     @NotNull(message = "Phone number should not be null")
     private long number;
 
     @NotNull(message = "Phone number city code should not be null")
-    private int cityCode;
+    private int citycode;
 
     @NotNull(message = "Phone number country code should not be null")
-    private String countryCode;
+    private String countrycode;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
     }
 
     public long getNumber() {
@@ -54,19 +51,27 @@ public class Phone {
         this.number = number;
     }
 
-    public int getCityCode() {
-        return cityCode;
+    public int getCitycode() {
+        return citycode;
     }
 
-    public void setCityCode(int cityCode) {
-        this.cityCode = cityCode;
+    public void setCitycode(int citycode) {
+        this.citycode = citycode;
     }
 
-    public String getCountryCode() {
-        return countryCode;
+    public String getCountrycode() {
+        return countrycode;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+    public void setCountrycode(String countrycode) {
+        this.countrycode = countrycode;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

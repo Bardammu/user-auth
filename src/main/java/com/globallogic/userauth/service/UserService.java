@@ -1,7 +1,7 @@
 package com.globallogic.userauth.service;
 
-import com.globallogic.userauth.model.request.UserRegistrationRequest;
-import com.globallogic.userauth.model.response.UserRegistrationResponse;
+import com.globallogic.userauth.dto.UserRegistrationRequestDto;
+import com.globallogic.userauth.dto.UserRegistrationResponseDto;
 import com.globallogic.userauth.validation.UserAlreadyExistException;
 
 /**
@@ -14,10 +14,10 @@ public interface UserService {
     /**
      * Register a new user
      *
-     * @param userRegistrationRequest the information of the new user to be register
+     * @param userRegistrationRequestDto the information of the new user to be register
      * @return the information of the registered user
      * @throws UserAlreadyExistException if the user is already registered
      */
-    UserRegistrationResponse registerNewUser(UserRegistrationRequest userRegistrationRequest);
+    UserRegistrationResponseDto registerNewUser(UserRegistrationRequestDto userRegistrationRequestDto);
 
 }

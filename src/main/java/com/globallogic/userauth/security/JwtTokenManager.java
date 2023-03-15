@@ -1,5 +1,6 @@
 package com.globallogic.userauth.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -37,14 +38,22 @@ public class JwtTokenManager {
         Date createdDate = Date.from(createdLocalDateTime.atZone(ZoneId.systemDefault()).toInstant());
         Date expirationDate =  Date.from(expirationLocalDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
-        byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
-        Key key = Keys.hmacShaKeyFor(keyBytes);
+        final byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
+        final Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String getEmailFromToken(String token) {
+        final byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
+        final Key key = Keys.hmacShaKeyFor(keyBytes);
+        final Claims claims  = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+
+        return claims.getSubject();
     }
 }

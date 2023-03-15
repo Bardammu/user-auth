@@ -1,5 +1,7 @@
 package com.globallogic.userauth.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +25,7 @@ import static javax.persistence.CascadeType.ALL;
 public final class User {
 
     @Id
-    @GeneratedValue(generator = "uuid4")
+    @GeneratedValue
     private UUID id;
 
     private String name;
@@ -36,16 +38,18 @@ public final class User {
     @NotBlank(message = "Password should not be null or blank")
     private String password;
 
-    @OneToMany(mappedBy = "userId", cascade = ALL)
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Phone> phones;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP", updatable = false)
+    @CreationTimestamp
     private LocalDateTime created;
 
     @Column(columnDefinition = "TIMESTAMP")
+    @CreationTimestamp
     private LocalDateTime lastLogin;
 
-    @NotNull(message = "tisActive should not be null")
+    @NotNull(message = "isActive should not be null")
     private boolean isActive;
 
 
