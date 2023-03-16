@@ -28,7 +28,7 @@ class UserRegistrationSpec extends IntegrationSpec {
                 created < LocalDateTime.now()
                 lastLogin < LocalDateTime.now()
                 jwtTokenManager.getEmailFromToken(token) == newUserRequest.getEmail()
-                isActive
+                active
             }
     }
 

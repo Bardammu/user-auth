@@ -25,9 +25,9 @@ public class UserRegistrationResponseDto {
 
     private final String token;
 
-    private final boolean isActive;
+    private final boolean active;
 
-    public UserRegistrationResponseDto(UUID id, String name, String email, List<PhoneDto> phones, LocalDateTime created, LocalDateTime lastLogin, String token, boolean isActive) {
+    public UserRegistrationResponseDto(UUID id, String name, String email, List<PhoneDto> phones, LocalDateTime created, LocalDateTime lastLogin, String token, boolean active) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -35,7 +35,7 @@ public class UserRegistrationResponseDto {
         this.created = created;
         this.lastLogin = lastLogin;
         this.token = token;
-        this.isActive = isActive;
+        this.active = active;
     }
 
     public UUID getId() {
@@ -67,6 +67,6 @@ public class UserRegistrationResponseDto {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 }

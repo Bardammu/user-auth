@@ -1,12 +1,12 @@
 package com.globallogic.userauth.service
 
-import com.globallogic.userauth.model.User
 import com.globallogic.userauth.dto.PhoneDto
 import com.globallogic.userauth.dto.UserRegistrationRequestDto
 import com.globallogic.userauth.dto.UserRegistrationResponseDto
+import com.globallogic.userauth.exception.UserAlreadyExistException
+import com.globallogic.userauth.model.User
 import com.globallogic.userauth.repository.UserRepository
 import com.globallogic.userauth.security.JwtTokenManager
-import com.globallogic.userauth.exception.UserAlreadyExistException
 import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Shared
 import spock.lang.Specification

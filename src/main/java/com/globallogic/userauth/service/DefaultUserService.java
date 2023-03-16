@@ -6,7 +6,6 @@ import com.globallogic.userauth.dto.UserRegistrationResponseDto;
 import com.globallogic.userauth.exception.UserAlreadyExistException;
 import com.globallogic.userauth.model.Phone;
 import com.globallogic.userauth.model.User;
-import com.globallogic.userauth.repository.PhoneRepository;
 import com.globallogic.userauth.repository.UserRepository;
 import com.globallogic.userauth.security.JwtTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +33,14 @@ public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
 
-    private final PhoneRepository phoneRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     private final JwtTokenManager jwtTokenManager;
 
     public DefaultUserService(@Autowired UserRepository userRepository,
-                              @Autowired PhoneRepository phoneRepository,
                               @Autowired PasswordEncoder passwordEncoder,
                               @Autowired JwtTokenManager jwtTokenManager) {
         this.userRepository = userRepository;
-        this.phoneRepository = phoneRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenManager = jwtTokenManager;
     }
