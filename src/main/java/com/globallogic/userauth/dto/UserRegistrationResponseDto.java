@@ -1,7 +1,5 @@
 package com.globallogic.userauth.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +25,6 @@ public class UserRegistrationResponseDto {
 
     private final String token;
 
-    @JsonProperty(value="isActive")
     private final boolean isActive;
 
     public UserRegistrationResponseDto(UUID id, String name, String email, List<PhoneDto> phones, LocalDateTime created, LocalDateTime lastLogin, String token, boolean isActive) {

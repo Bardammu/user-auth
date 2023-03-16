@@ -1,7 +1,5 @@
 package com.globallogic.userauth.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Objects;
 
 /**
@@ -13,10 +11,8 @@ public class PhoneDto {
 
     private final long number;
 
-    @JsonProperty(value="citycode")
     private final int cityCode;
 
-    @JsonProperty(value="countrycode")
     private final String countryCode;
 
     public PhoneDto(long number, int cityCode, String countrycode) {

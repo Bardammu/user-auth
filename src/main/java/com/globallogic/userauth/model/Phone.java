@@ -1,5 +1,7 @@
 package com.globallogic.userauth.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,16 +22,18 @@ public class Phone {
 
     @Id
     @GeneratedValue
+    /* change binary column to String */
+    @Type(type="org.hibernate.type.UUIDCharType")
     private UUID id;
 
     @NotNull(message = "Phone number should not be null")
     private long number;
 
     @NotNull(message = "Phone number city code should not be null")
-    private int citycode;
+    private int cityCode;
 
     @NotNull(message = "Phone number country code should not be null")
-    private String countrycode;
+    private String countryCode;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
@@ -51,20 +55,20 @@ public class Phone {
         this.number = number;
     }
 
-    public int getCitycode() {
-        return citycode;
+    public int getCityCode() {
+        return cityCode;
     }
 
-    public void setCitycode(int citycode) {
-        this.citycode = citycode;
+    public void setCityCode(int cityCode) {
+        this.cityCode = cityCode;
     }
 
-    public String getCountrycode() {
-        return countrycode;
+    public String getCountryCode() {
+        return countryCode;
     }
 
-    public void setCountrycode(String countrycode) {
-        this.countrycode = countrycode;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     public User getUser() {

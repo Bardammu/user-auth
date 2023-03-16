@@ -1,6 +1,7 @@
 package com.globallogic.userauth.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,11 +27,13 @@ public final class User {
 
     @Id
     @GeneratedValue
+    /* change binary column to String */
+    @Type(type="org.hibernate.type.UUIDCharType")
     private UUID id;
 
     private String name;
 
-    @Column(unique=true)
+    @Column(unique = true)
     @NotBlank(message = "Name should not be null or blank")
     @Email
     private String email;
@@ -90,6 +93,7 @@ public final class User {
     }
 
     public void setPhones(List<Phone> phones) {
+        phones.forEach(p -> p.setUser(this));
         this.phones = phones;
     }
 

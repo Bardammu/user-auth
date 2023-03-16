@@ -2,9 +2,12 @@ package com.globallogic.userauth.controller;
 
 import com.globallogic.userauth.dto.UserRegistrationRequestDto;
 import com.globallogic.userauth.dto.UserRegistrationResponseDto;
+import com.globallogic.userauth.model.User;
 import com.globallogic.userauth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +16,7 @@ import javax.validation.Valid;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
 /**
@@ -33,5 +37,12 @@ public class UserController {
     public ResponseEntity<UserRegistrationResponseDto> signup(@Valid @RequestBody final UserRegistrationRequestDto userRegistrationRequestDto) {
         UserRegistrationResponseDto userRegistrationResponseDto = userService.registerNewUser(userRegistrationRequestDto);
         return status(CREATED).body(userRegistrationResponseDto);
+    }
+
+    @GetMapping(path = "/login", consumes = { APPLICATION_JSON_VALUE }, produces = { APPLICATION_JSON_VALUE })
+    public ResponseEntity<UserRegistrationResponseDto> login(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        UserRegistrationResponseDto userRegistrationResponseDto = userService.getUser(user.getEmail());
+        return ok().body(userRegistrationResponseDto);
     }
 }
