@@ -1,0 +1,4 @@
+SET REFERENTIAL_INTEGRITY FALSE;
+TRUNCATE TABLE users;
+SET REFERENTIAL_INTEGRITY TRUE;
+INSERT INTO users (id, name, email, password, created, last_login, is_active) VALUES (RANDOM_UUID(), 'Joe', 'joe@mail.com','eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3ZW5jZXNqQGdtYWlsLmNvbSIsImlhdCI6MTY3ODkxOTE2NywiZXhwIjoxNjc4OTE5NDY3fQ.HIKWapczrHPOGV4yvLchfftORSa8j1BE8nfHz7cUKJU', PARSEDATETIME('1983-02-29','yyyy-MM-dd'), PARSEDATETIME('1983-02-29','yyyy-MM-dd'), true)

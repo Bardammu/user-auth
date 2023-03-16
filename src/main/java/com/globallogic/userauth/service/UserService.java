@@ -2,7 +2,7 @@ package com.globallogic.userauth.service;
 
 import com.globallogic.userauth.dto.UserRegistrationRequestDto;
 import com.globallogic.userauth.dto.UserRegistrationResponseDto;
-import com.globallogic.userauth.validation.UserAlreadyExistException;
+import com.globallogic.userauth.exception.UserAlreadyExistException;
 
 /**
  * Service to manage User registration

@@ -1,7 +1,11 @@
 package com.globallogic.userauth.dto;
 
+import com.globallogic.userauth.validation.ValidPassword;
+
+import javax.validation.constraints.Email;
 import java.util.List;
 
+import static com.globallogic.userauth.validation.Errors.MALFORMED_EMAIL_ADDRESS_DETAILS;
 import static java.util.Collections.emptyList;
 
 /**
@@ -13,8 +17,10 @@ public class UserRegistrationRequestDto {
 
     private final String name;
 
+    @Email(message = MALFORMED_EMAIL_ADDRESS_DETAILS)
     private final String email;
 
+    @ValidPassword
     private final String password;
 
     private final List<PhoneDto> phones;

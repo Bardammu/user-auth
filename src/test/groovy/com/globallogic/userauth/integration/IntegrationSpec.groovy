@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.test.context.jdbc.Sql
 import spock.lang.Shared
 import spock.lang.Specification
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD
 
 @SpringBootTest(classes = UserAuthApplication, webEnvironment = RANDOM_PORT)
+@Sql(scripts = "/sql/testData.sql", executionPhase = BEFORE_TEST_METHOD)
 @EnableSharedInjection
 class IntegrationSpec extends Specification{
 
