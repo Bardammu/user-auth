@@ -1,6 +1,6 @@
 package com.globallogic.userauth.integration
 
-import com.globallogic.userauth.dto.UserRegistrationResponseDto
+import com.globallogic.userauth.dto.UserResponseDto
 import org.springframework.http.HttpEntity
 
 import java.time.LocalDateTime
@@ -13,12 +13,12 @@ class UserRetrievalSpec extends IntegrationSpec{
     def "register a user and get its information"() {
         given: "a user has been registered and the authentication token saved"
             def requestEntity = new HttpEntity<>(newUserRequest)
-            def responseEntity = restTemplate.postForEntity(URL_SIGNUP, requestEntity , UserRegistrationResponseDto.class)
+            def responseEntity = restTemplate.postForEntity(URL_SIGNUP, requestEntity , UserResponseDto.class)
             def firstToken = responseEntity.getBody().getToken()
 
         when: "the user information is retrieve with the authentication token"
             requestEntity = new HttpEntity<>(authenticationHeader(firstToken))
-            responseEntity = restTemplate.exchange(URL_LOGIN, GET, requestEntity, UserRegistrationResponseDto.class)
+            responseEntity = restTemplate.exchange(URL_LOGIN, GET, requestEntity, UserResponseDto.class)
 
         then: "status code is 200"
             responseEntity.statusCode == OK

@@ -2,7 +2,7 @@ package com.globallogic.userauth.service;
 
 import com.globallogic.userauth.dto.PhoneDto;
 import com.globallogic.userauth.dto.UserRegistrationRequestDto;
-import com.globallogic.userauth.dto.UserRegistrationResponseDto;
+import com.globallogic.userauth.dto.UserResponseDto;
 import com.globallogic.userauth.exception.UserAlreadyExistException;
 import com.globallogic.userauth.model.Phone;
 import com.globallogic.userauth.model.User;
@@ -14,10 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
@@ -46,43 +44,24 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public UserRegistrationResponseDto registerNewUser(UserRegistrationRequestDto userRegistrationRequestDto) {
+    public UserResponseDto registerNewUser(UserRegistrationRequestDto userRegistrationRequestDto) {
         if (userRepository.existsByEmail(userRegistrationRequestDto.getEmail())) {
             throw new UserAlreadyExistException(format("The email '%s' is already used", userRegistrationRequestDto.getEmail()));
         }
 
-        String name = userRegistrationRequestDto.getName();
-        String email = userRegistrationRequestDto.getEmail();
-        List<Phone> phones = userRegistrationRequestDto.getPhones().stream().map(p -> {
-            Phone phone = new Phone();
-            phone.setNumber(p.getNumber());
-            phone.setCityCode(p.getCityCode());
-            phone.setCountryCode(p.getCountryCode());
-            return phone;
-        }).collect(toList());
-        String encodedPassword = passwordEncoder.encode(userRegistrationRequestDto.getPassword());
-        boolean isActive = true;
-
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPhones(phones);
-        user.setActive(isActive);
-        user.setPassword(encodedPassword);
+        User user = getUser(userRegistrationRequestDto);
 
         user = userRepository.saveAndFlush(user);
 
-        UUID id = user.getId();
         List<PhoneDto> phoneDtos = userRegistrationRequestDto.getPhones();
-        LocalDateTime created = user.getCreated();
-        LocalDateTime lastLogin = user.getLastLogin();
         String token = jwtTokenManager.generateJwtToken(user.getEmail());
 
-        return new UserRegistrationResponseDto(id, name, email, phoneDtos, created, lastLogin, token, isActive);
+        return new UserResponseDto(user.getId(), user.getName(), user.getEmail(), phoneDtos,
+                user.getCreated(), user.getLastLogin(), token, user.isActive());
     }
 
     @Override
-    public UserRegistrationResponseDto getUser(String email) {
+    public UserResponseDto getUser(String email) {
         Optional<User> userOptional =  userRepository.findByEmail(email);
 
         if (!userOptional.isPresent()) {
@@ -91,16 +70,34 @@ public class DefaultUserService implements UserService {
 
         User user = userOptional.get();
 
-        UUID id = user.getId();
-        String name = user.getName();
         List<PhoneDto> phoneDtos = user.getPhones().stream()
                 .map(p -> new PhoneDto(p.getNumber(), p.getCityCode(), p.getCountryCode())).collect(toList());
-        LocalDateTime created = user.getCreated();
-        LocalDateTime lastLogin = user.getLastLogin();
-        boolean isActive = user.isActive();
         String token = jwtTokenManager.generateJwtToken(user.getEmail());
 
-        return new UserRegistrationResponseDto(id, name, email, phoneDtos, created, lastLogin, token, isActive);
+        return new UserResponseDto(user.getId(), user.getName(), user.getEmail(), phoneDtos,
+                user.getCreated(), user.getLastLogin(), token, user.isActive());
     }
 
+    private User getUser(UserRegistrationRequestDto userRegistrationRequestDto) {
+        User user = new User();
+
+        user.setName(userRegistrationRequestDto.getName());
+        user.setEmail(userRegistrationRequestDto.getEmail());
+
+        List<Phone> phones = userRegistrationRequestDto.getPhones().stream().map(p -> {
+            Phone phone = new Phone();
+            phone.setNumber(p.getNumber());
+            phone.setCityCode(p.getCityCode());
+            phone.setCountryCode(p.getCountryCode());
+            return phone;
+        }).collect(toList());
+        user.setPhones(phones);
+
+        String encodedPassword = passwordEncoder.encode(userRegistrationRequestDto.getPassword());
+        user.setPassword(encodedPassword);
+
+        user.setActive(true);
+
+        return user;
+    }
 }

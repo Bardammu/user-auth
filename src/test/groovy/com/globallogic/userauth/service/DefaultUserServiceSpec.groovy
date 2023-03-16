@@ -2,7 +2,7 @@ package com.globallogic.userauth.service
 
 import com.globallogic.userauth.dto.PhoneDto
 import com.globallogic.userauth.dto.UserRegistrationRequestDto
-import com.globallogic.userauth.dto.UserRegistrationResponseDto
+import com.globallogic.userauth.dto.UserResponseDto
 import com.globallogic.userauth.exception.UserAlreadyExistException
 import com.globallogic.userauth.model.User
 import com.globallogic.userauth.repository.UserRepository
@@ -57,7 +57,7 @@ class DefaultUserServiceSpec extends Specification {
             }
 
         when: "the user is register using the UserService"
-            UserRegistrationResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequest)
+            UserResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequest)
 
         then: "the user is saved on the database"
             verifyAll(userRegistrationResponse) {
@@ -81,7 +81,7 @@ class DefaultUserServiceSpec extends Specification {
             }
 
         when: "the user is register using the UserService"
-            UserRegistrationResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
+            UserResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
 
         then: "the user is saved on the database with an UUID"
             userRegistrationResponse.getId() == uuid
@@ -106,7 +106,7 @@ class DefaultUserServiceSpec extends Specification {
             userRepository.saveAndFlush(_ as User) >> { User user -> user }
 
         when: "the user is register using the UserService"
-            UserRegistrationResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
+            UserResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
 
         then: "the user is saved as active"
             userRegistrationResponse.isActive()
@@ -120,7 +120,7 @@ class DefaultUserServiceSpec extends Specification {
             jwtTokenManager.generateJwtToken(_) >> { "token" }
 
         when: "the user is register using the UserService"
-            UserRegistrationResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
+            UserResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
 
         then: "a authentication token is returned"
             userRegistrationResponse.getToken() == "token"
@@ -137,7 +137,7 @@ class DefaultUserServiceSpec extends Specification {
             }
 
         when: "the user is register using the UserService"
-            UserRegistrationResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
+            UserResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
 
         then: "the user creation date is returned"
             userRegistrationResponse.getCreated() == localDateTime
@@ -154,7 +154,7 @@ class DefaultUserServiceSpec extends Specification {
             }
 
         when: "the user is register using the UserService"
-            UserRegistrationResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
+            UserResponseDto userRegistrationResponse = userService.registerNewUser(userRegistrationRequestCompletedData)
 
         then: "the user last login is returned"
             userRegistrationResponse.getLastLogin() == localDateTime

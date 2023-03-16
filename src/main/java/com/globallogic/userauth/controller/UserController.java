@@ -1,7 +1,7 @@
 package com.globallogic.userauth.controller;
 
 import com.globallogic.userauth.dto.UserRegistrationRequestDto;
-import com.globallogic.userauth.dto.UserRegistrationResponseDto;
+import com.globallogic.userauth.dto.UserResponseDto;
 import com.globallogic.userauth.model.User;
 import com.globallogic.userauth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +34,15 @@ public class UserController {
     }
 
     @PostMapping(path = "/sign-up", consumes = { APPLICATION_JSON_VALUE }, produces = { APPLICATION_JSON_VALUE })
-    public ResponseEntity<UserRegistrationResponseDto> signup(@Valid @RequestBody final UserRegistrationRequestDto userRegistrationRequestDto) {
-        UserRegistrationResponseDto userRegistrationResponseDto = userService.registerNewUser(userRegistrationRequestDto);
-        return status(CREATED).body(userRegistrationResponseDto);
+    public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody final UserRegistrationRequestDto userRegistrationRequestDto) {
+        UserResponseDto userResponseDto = userService.registerNewUser(userRegistrationRequestDto);
+        return status(CREATED).body(userResponseDto);
     }
 
     @GetMapping(path = "/login", consumes = { APPLICATION_JSON_VALUE }, produces = { APPLICATION_JSON_VALUE })
-    public ResponseEntity<UserRegistrationResponseDto> login(Authentication authentication) {
+    public ResponseEntity<UserResponseDto> login(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        UserRegistrationResponseDto userRegistrationResponseDto = userService.getUser(user.getEmail());
-        return ok().body(userRegistrationResponseDto);
+        UserResponseDto userResponseDto = userService.getUser(user.getEmail());
+        return ok().body(userResponseDto);
     }
 }

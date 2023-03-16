@@ -14,6 +14,11 @@ import java.io.IOException;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+/**
+ * Spring security filter that validates the JWT Tokens
+ *
+ * @since 1.0.0
+ */
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 

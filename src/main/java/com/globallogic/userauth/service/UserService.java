@@ -1,7 +1,7 @@
 package com.globallogic.userauth.service;
 
 import com.globallogic.userauth.dto.UserRegistrationRequestDto;
-import com.globallogic.userauth.dto.UserRegistrationResponseDto;
+import com.globallogic.userauth.dto.UserResponseDto;
 import com.globallogic.userauth.exception.UserAlreadyExistException;
 import com.globallogic.userauth.model.User;
 
@@ -19,7 +19,7 @@ public interface UserService {
      * @return the information of the registered user
      * @throws UserAlreadyExistException if the user is already registered
      */
-    UserRegistrationResponseDto registerNewUser(UserRegistrationRequestDto userRegistrationRequestDto);
+    UserResponseDto registerNewUser(UserRegistrationRequestDto userRegistrationRequestDto);
 
     /**
      * Get all the information of a registered {@link User}
@@ -27,5 +27,5 @@ public interface UserService {
      * @param email that identifies the {@link User}
      * @return the {@link User}
      */
-    UserRegistrationResponseDto getUser(String email);
+    UserResponseDto getUser(String email);
 }
